@@ -20,6 +20,12 @@ public class Book {
     @Column(name = "average_score")
     private double averageScore;
 
+    @Column(name = "score_amount")
+    private int amountOfScores;
+
+    public Book() {
+    }
+
     public int getId() {
         return id;
     }
@@ -52,7 +58,12 @@ public class Book {
         this.averageScore = averageScore;
     }
 
-    public String toString() {
-        return title + " (" + averageScore + "): " + description;
+    public int getAmountOfScores() {
+        return amountOfScores;
     }
+
+    public void setAmountOfScores(int amountOfScores) {
+        this.amountOfScores = amountOfScores;
+    }
+
 }

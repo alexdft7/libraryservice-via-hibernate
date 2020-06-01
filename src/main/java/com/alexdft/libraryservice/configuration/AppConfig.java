@@ -11,11 +11,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
-import java.util.Properties;
+import java.util.*;
 
 @Configuration
 @EnableWebMvc
@@ -29,6 +32,16 @@ public class AppConfig {
     @Autowired
     public AppConfig (Environment env) {
         this.env=env;
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setContentType("text/html;charset=UTF-8");
+        resolver.setPrefix("/WEB-INF/view/");
+        resolver.setSuffix(".jsp");
+        resolver.setViewClass(JstlView.class);
+        return resolver;
     }
 
     @Bean
@@ -57,12 +70,6 @@ public class AppConfig {
         return props;
     }
 
-    private int getIntProperty(String propName) {
-        String propVal = env.getProperty(propName);
-
-        return Integer.parseInt(propVal);
-    }
-
     @Bean
     public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -81,5 +88,11 @@ public class AppConfig {
         txManager.setSessionFactory(sessionFactory);
 
         return txManager;
+    }
+
+    private int getIntProperty(String propName) {
+        String propVal = env.getProperty(propName);
+
+        return Integer.parseInt(propVal);
     }
 }
